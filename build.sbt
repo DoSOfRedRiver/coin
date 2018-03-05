@@ -8,17 +8,19 @@ scalacOptions ++= Seq(
   "-Ypartial-unification",
   "-Yinduction-heuristics" ,
   "-Xfatal-warnings",
-  "-language:higherKinds"
+  "-language:higherKinds",
+  "-deprecation"
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
-
 
 val monocleVersion = "1.5.0-cats"
 
 PB.targets in Compile := Seq(
   scalapb.gen() -> (sourceManaged in Compile).value
 )
+
+mainClass in assembly := Some("coin.Main")
 
 val monocle = Seq(
   "com.github.julien-truffaut" %%  "monocle-core"  % monocleVersion,

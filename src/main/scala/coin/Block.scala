@@ -21,7 +21,7 @@ case class Hash(bytes: Seq[Byte]) {
 case class Header(index: Long, prevHash: Hash, nonce: Long, timestamp: Long = System.currentTimeMillis())
 
 case class  Block[T](header: Header, body: T) {
-  import Block.Digest._
+  import Block._
 
   val bytes = toString.getBytes(Block.UtfCharset)
 
@@ -29,8 +29,10 @@ case class  Block[T](header: Header, body: T) {
 }
 
 object Block {
-  val Digest = MessageDigest.getInstance("SHA-256")
-  val UtfCharset = Charset.forName("UTF-8")
+  def digest: Array[Byte] => Array[Byte] =
+    MessageDigest.getInstance("SHA-256").digest
+
+  val UtfCharset: Charset = Charset.forName("UTF-8")
 
   def fromBlock[T,A](block: Block[T], body: A): Block[A] = {
     val header = Header(block.header.index + 1, block.hash, nonce = 0)
