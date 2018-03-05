@@ -1,8 +1,9 @@
 package coin
 
-import coin.proto.block.{Block => PBlock, Header => PHeader}
+import cats.effect.IO
 
 
 object Main extends App {
-  println("Hello, world!")
+  val genesisBlock = Block(Header(0,Hash(Seq.empty),-454821241,1520117211495L),"genesis")
+  println(genesisBlock.hash)
 }
