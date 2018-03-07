@@ -8,7 +8,7 @@ sealed trait StreamsStorage {
 }
 
 case class FileStorage(file: File) extends StreamsStorage {
-  val os = new FileOutputStream(file)
+  val os = new FileOutputStream(file, true)
   val is = new FileInputStream(file)
 }
 
@@ -26,7 +26,7 @@ case class MemoryStorage() extends StreamsStorage {
       if (readed >= bytes.length) -1
       else {
         readed = readed + 1
-        bytes(readed - 1)
+        (bytes(readed - 1) + 256) % 256
       }
     }
   }

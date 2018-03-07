@@ -8,6 +8,7 @@ scalacOptions ++= Seq(
   "-Ypartial-unification",
   "-Yinduction-heuristics" ,
   "-Xfatal-warnings",
+  "-Xstrict-patmat-analysis",
   "-language:higherKinds",
   "-deprecation"
 )

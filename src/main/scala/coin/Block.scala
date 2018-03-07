@@ -38,4 +38,6 @@ object Block {
     val header = Header(block.header.index + 1, block.hash, nonce = 0)
     Block(header, body)
   }
+
+  case object BlockNotFoundException extends Exception
 }
