@@ -1,7 +1,7 @@
 package coin.util
 
 import cats.{Functor, ~>}
-import coin.util.Instances.ConvertibleInstances
+import coin.util.instances.ConvertibleInstances
 import monocle.PIso
 
 import scala.language.higherKinds

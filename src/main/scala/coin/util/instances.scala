@@ -14,7 +14,7 @@ import shapeless.ops.record.Selector
 
 import scala.language.higherKinds
 
-object Instances {
+object instances {
   object protobuf {
     implicit val convBytes: Convertible[Array[Byte],ByteString] = ByteString.copyFrom(_)
     implicit val convByteStr: Convertible[ByteString,Array[Byte]] = _.toByteArray

@@ -2,7 +2,7 @@ package coin.serialize
 
 import cats.data.ReaderT
 import cats.effect.Effect
-import coin.util.Instances.SerializeInstances
+import coin.util.instances.SerializeInstances
 
 import scala.language.higherKinds
 

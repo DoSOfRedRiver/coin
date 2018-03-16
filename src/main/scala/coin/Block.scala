@@ -1,21 +1,17 @@
 package coin
 
-import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.security.MessageDigest
+
+import coin.util.converters.BytesToHex
 
 import scala.language.higherKinds
 
 
 case class Hash(bytes: Seq[Byte]) {
-  val numbers: Array[Int] = {
-    val bb = ByteBuffer.wrap(bytes.toArray).asIntBuffer()
-    val arr = Array.fill[Int](bytes.length / 4)(0)
-    bb.get(arr)
-    arr
-  }
+  val hex = BytesToHex.bytesToHex(bytes.toArray)
 
-  override def toString: String = s"Hash(${numbers.mkString(" ")})"
+  override def toString: String = s"Hash($hex)"
 }
 
 case class Header(index: Long, prevHash: Hash, nonce: Long, timestamp: Long = System.currentTimeMillis())

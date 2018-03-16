@@ -1,5 +1,7 @@
 package coin
 
+import java.nio.ByteBuffer
+
 import cats.effect.Sync
 import cats.implicits._
 import coin.util.RaceExecutor
@@ -8,7 +10,7 @@ import monocle.macros.GenLens
 import scala.annotation.tailrec
 
 object ProofOfWork {
-  val complexity = 1
+  val complexity = 8
 
   def proof[T](block: Block[T], from: Long = 0): Block[T] = {
     val lens = GenLens[Block[T]](_.header.nonce)
@@ -27,8 +29,9 @@ object ProofOfWork {
   }
 
   def calculate[T](block: Block[T]): Option[Block[T]] = {
-    val ints = block.hash.numbers.takeRight(complexity)
-    if (ints.sum === 0) Some(block)
+    val leading = block.hash.hex.take(complexity)
+
+    if (leading.forall(_ == '0')) Some(block)
     else None
   }
 

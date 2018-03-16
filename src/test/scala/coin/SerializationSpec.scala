@@ -5,7 +5,7 @@ import cats.effect.IO
 import coin.Block.BlockNotFoundException
 import org.scalatest.{FlatSpec, Matchers}
 import coin.serialize.{MemoryStorage, Serialize, StreamsStorage}
-import coin.util.Instances.protobuf._
+import coin.util.instances.protobuf._
 
 class SerializationSpec extends FlatSpec with Matchers {
   val store = implicitly[Serialize[StreamsStorage,Block[String]]]
