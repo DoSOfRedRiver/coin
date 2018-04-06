@@ -8,6 +8,7 @@ scalacOptions ++= Seq(
   "-Ypartial-unification",
   "-Yinduction-heuristics" ,
   "-Xfatal-warnings",
+  "-Xstrict-patmat-analysis",
   "-language:higherKinds",
   "-deprecation"
 )
@@ -31,7 +32,7 @@ val monocle = Seq(
 libraryDependencies ++= (
   Seq(
     "org.typelevel" %% "cats-core" % "1.0.1",
-    "org.typelevel" %% "cats-effect" % "0.9",
+    "org.typelevel" %% "cats-effect" % "0.10",
     "com.chuusai" %% "shapeless" % "2.3.3",
     "org.scalactic" %% "scalactic" % "3.0.5",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test",

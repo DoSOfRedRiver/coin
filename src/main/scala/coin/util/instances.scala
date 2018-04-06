@@ -1,9 +1,8 @@
 package coin.util
 
-import java.util.EmptyStackException
-
 import cats.data.ReaderT
-import cats.effect.{Effect, IO}
+import cats.effect.Effect
+import coin.Block.BlockNotFoundException
 import coin.Hash
 import coin.proto.block.{Block => PBlock}
 import coin.serialize.{Serialize, StreamsStorage}
@@ -15,7 +14,7 @@ import shapeless.ops.record.Selector
 
 import scala.language.higherKinds
 
-object Instances {
+object instances {
   object protobuf {
     implicit val convBytes: Convertible[Array[Byte],ByteString] = ByteString.copyFrom(_)
     implicit val convByteStr: Convertible[ByteString,Array[Byte]] = _.toByteArray
@@ -61,7 +60,7 @@ object Instances {
           val value = F.delay(PBlock.parseDelimitedFrom(store.is))
           F.flatMap(value) {
             case Some(x) => F.pure(x)
-            case None => F.raiseError[PBlock](new EmptyStackException())
+            case None => F.raiseError[PBlock](BlockNotFoundException)
           }
         }
     }
