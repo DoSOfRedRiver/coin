@@ -1,0 +1,1 @@
+[![CircleCI](https://circleci.com/gh/DoSOfRedRiver/coin/tree/master.svg?style=svg)](https://circleci.com/gh/DoSOfRedRiver/coin/tree/master)
