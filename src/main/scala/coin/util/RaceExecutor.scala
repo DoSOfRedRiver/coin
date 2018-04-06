@@ -1,6 +1,7 @@
 package coin.util
 
 import java.lang.System.currentTimeMillis
+import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 import java.util.concurrent.{Callable, TimeUnit}
 
 import cats.effect.Sync
@@ -14,8 +15,8 @@ class RaceExecutor[A,R](producer: () => A, consumer: A => Option[R]) {
   val numThreads = Runtime.getRuntime.availableProcessors + 1
   val executor = Executors.newFixedThreadPool(numThreads)
 
-  @volatile private var c = 0
-  @volatile private var time = currentTimeMillis()
+  private val c = new AtomicInteger(0)
+  private val time = new AtomicLong(0)
 
   def apply[F[_]](implicit F: Sync[F]): F[R] = {
     val computation = F.delay {
@@ -55,13 +56,13 @@ class RaceExecutor[A,R](producer: () => A, consumer: A => Option[R]) {
   }
 
   private def count(): Unit = {
-    c = c + 1
+    c.incrementAndGet()
 
     val currTime = currentTimeMillis()
-    if (currTime - time > 1000) {
+    if (currTime - time.get() > 1000) {
       print(s"\rRate: $c")
-      time = currTime
-      c = 0
+      time.set(currTime)
+      c.set(0)
     }
   }
 }

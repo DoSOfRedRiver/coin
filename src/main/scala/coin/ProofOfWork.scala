@@ -1,10 +1,9 @@
 package coin
 
-import java.nio.ByteBuffer
+import java.util.concurrent.atomic.AtomicLong
 
-import cats.effect.Sync
-import cats.implicits._
-import coin.util.RaceExecutor
+import cats.effect.{IO, Sync}
+import coin.util.{IORaceExecutor, RaceExecutor}
 import monocle.macros.GenLens
 
 import scala.annotation.tailrec
@@ -35,7 +34,7 @@ object ProofOfWork {
     else None
   }
 
-  def proofMultithreaded[T,F[_]: Sync](block: Block[T]): F[Block[T]] = {
+  def proofMultithreaded[T, F[_]: Sync](block: Block[T]): F[Block[T]] = {
     val lens = GenLens[Block[T]](_.header.nonce)
 
     var nonce = 0
@@ -47,5 +46,16 @@ object ProofOfWork {
 
     val executor = new RaceExecutor[Block[T],Block[T]](mutator, calculate)
     executor[F]
+  }
+
+  def proofMultithreadedIo[T](block: Block[T]): IO[Block[T]] = {
+    val lens = GenLens[Block[T]](_.header.nonce)
+    val nonce = new AtomicLong(-1)
+
+    val producer = () => lens.set(nonce.incrementAndGet())(block)
+
+    val ex = new IORaceExecutor[Block[T],Block[T]](producer, calculate)
+
+    ex.run
   }
 }

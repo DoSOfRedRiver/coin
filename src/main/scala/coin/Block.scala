@@ -4,6 +4,7 @@ import java.nio.charset.Charset
 import java.security.MessageDigest
 
 import coin.util.converters.BytesToHex
+import monocle.macros.GenLens
 
 import scala.language.higherKinds
 
@@ -25,10 +26,10 @@ case class  Block[T](header: Header, body: T) {
 }
 
 object Block {
+  val UtfCharset: Charset = Charset.forName("UTF-8")
+
   def digest: Array[Byte] => Array[Byte] =
     MessageDigest.getInstance("SHA-256").digest
-
-  val UtfCharset: Charset = Charset.forName("UTF-8")
 
   def fromBlock[T,A](block: Block[T], body: A): Block[A] = {
     val header = Header(block.header.index + 1, block.hash, nonce = 0)
