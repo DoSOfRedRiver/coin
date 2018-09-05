@@ -1,7 +1,7 @@
 package coin.util
 
 import cats.data.ReaderT
-import cats.effect.Effect
+import cats.effect.{ContextShift, Effect, IO}
 import coin.Block.BlockNotFoundException
 import coin.Hash
 import coin.proto.block.{Block => PBlock}
@@ -72,6 +72,18 @@ object instances {
     ) = new Serialize[S,A] {
       override def write[F[_] : Effect](a: => A): ReaderT[F, S, Unit] = sB.write(c1(a))
       override def read[F[_] : Effect]: ReaderT[F, S, A] = sB.read[F].map(c2.apply)
+    }
+  }
+
+  trait RaceInstances {
+    implicit def raceIO(implicit cs: ContextShift[IO]) = new Race[IO] {
+      override def race[A, B](lh: IO[A], rh: IO[B]): IO[Either[A,B]] = IO.race(lh, rh)
+    }
+  }
+
+  trait CancelableInstances {
+    implicit val cancelableIO = new Cancelable[IO] {
+      override def cancelBoundary: IO[Unit] = IO.cancelBoundary
     }
   }
 }

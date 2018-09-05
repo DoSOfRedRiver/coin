@@ -14,8 +14,9 @@ scalacOptions ++= Seq(
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.2.4")
 
-val monocleVersion = "1.5.0-cats"
+val monocleVersion = "1.5.1-cats"
 
 PB.targets in Compile := Seq(
   scalapb.gen() -> (sourceManaged in Compile).value
@@ -31,8 +32,8 @@ val monocle = Seq(
 
 libraryDependencies ++= (
   Seq(
-    "org.typelevel" %% "cats-core" % "1.0.1",
-    "org.typelevel" %% "cats-effect" % "0.10",
+    "org.typelevel" %% "cats-core" % "1.2.0",
+    "org.typelevel" %% "cats-effect" % "1.0.0-RC3",
     "com.chuusai" %% "shapeless" % "2.3.3",
     "org.scalactic" %% "scalactic" % "3.0.5",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test",
